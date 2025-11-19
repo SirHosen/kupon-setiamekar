@@ -852,9 +852,6 @@ const DataKupon = () => {
                             className="input-field"
                             placeholder="Contoh: 1-10, 123, 78"
                           />
-                          <p className="text-xs text-gray-500 mt-1">
-                            Format: 1-10 (range), 123 (single), atau 1,5,10 (list). Tekan Enter atau pisah dengan koma.
-                          </p>
                         </div>
                       )}
 
