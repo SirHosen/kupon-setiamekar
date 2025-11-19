@@ -21,7 +21,7 @@ const LotteryAnimation = ({ isDrawing, result, onComplete }) => {
         if (onComplete) {
           onComplete()
         }
-      }, 3000)
+      }, 7000)
 
       return () => clearInterval(interval)
     } else if (result) {
