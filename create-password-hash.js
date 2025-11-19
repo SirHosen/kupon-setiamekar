@@ -9,7 +9,7 @@ function hashPassword(password) {
 const passwords = [
   { username: 'hosea', password: 'hosea123' },
   { username: 'bgyos', password: 'neslitehijau' },
-  { username: 'bgpranto', password: 'juaraapel' },
+  { username: 'sianturi', password: 'sianturi' },
 ]
 
 console.log('='.repeat(60))
