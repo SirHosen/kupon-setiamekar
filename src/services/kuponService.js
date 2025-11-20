@@ -140,7 +140,8 @@ export const kuponService = {
       .from('kupons')
       .select('*')
 
-    const totalKeluarga = new Set(kupons?.map(k => k.nama_keluarga)).size
+    // Total Partisipan = jumlah total transaksi (bukan keluarga unik)
+    const totalPartisipan = kupons?.length || 0
     
     // Hitung total kupon dari jumlah_kupon atau array length
     const totalKupon = kupons?.reduce((sum, k) => {
@@ -174,7 +175,7 @@ export const kuponService = {
       .reduce((sum, k) => sum + (k.jumlah_kupon || (Array.isArray(k.nomor_kupon) ? k.nomor_kupon.length : 1)), 0) || 0
 
     return {
-      totalKeluarga,
+      totalPartisipan, // Jumlah transaksi
       totalKupon,
       totalLunas,
       totalDP,
@@ -197,12 +198,18 @@ export const undianService = {
       .eq('status_penerimaan', 'Diterima') // CRITICAL: Hanya kupon yang sudah diterima
 
     if (error) throw error
-    return data
+    
+    // Hitung total kupon (bukan total record)
+    const totalKuponLunas = data?.reduce((sum, k) => {
+      return sum + (k.jumlah_kupon || (Array.isArray(k.nomor_kupon) ? k.nomor_kupon.length : 1))
+    }, 0) || 0
+    
+    return { data, totalKuponLunas }
   },
 
   // Undi kupon secara acak
   async drawRandomKupon() {
-    const eligibleKupons = await this.getEligibleKupons()
+    const { data: eligibleKupons } = await this.getEligibleKupons()
     
     if (eligibleKupons.length === 0) {
       throw new Error('Tidak ada kupon yang berstatus Lunas untuk diundi')

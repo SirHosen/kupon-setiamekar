@@ -7,7 +7,7 @@ import { motion } from 'framer-motion'
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
-    totalKeluarga: 0,
+    totalPartisipan: 0,
     totalKupon: 0,
     totalLunas: 0,
     totalDP: 0,
@@ -33,8 +33,8 @@ const Dashboard = () => {
 
   const statCards = [
     {
-      title: 'Total Keluarga',
-      value: stats.totalKeluarga,
+      title: 'Total Partisipan',
+      value: stats.totalPartisipan,
       icon: Users,
       color: 'from-blue-500 to-blue-600',
       bgColor: 'bg-blue-50',

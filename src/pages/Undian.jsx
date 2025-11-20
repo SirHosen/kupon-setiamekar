@@ -17,8 +17,8 @@ const Undian = () => {
 
   const loadEligibleCount = async () => {
     try {
-      const eligible = await undianService.getEligibleKupons()
-      setEligibleCount(eligible.length)
+      const { totalKuponLunas } = await undianService.getEligibleKupons()
+      setEligibleCount(totalKuponLunas)
     } catch (error) {
       console.error('Error loading eligible kupons:', error)
     }
