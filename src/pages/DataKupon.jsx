@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import Navbar from '../components/Navbar'
 import DataTable from '../components/DataTable'
 import { kuponService } from '../services/kuponService'
@@ -319,28 +319,30 @@ const DataKupon = () => {
     })
   }
 
-  // Filter data
-  const filteredKupons = kupons.filter((kupon) => {
-    // Handle array atau string untuk nomor_kupon
-    const kuponNumbers = Array.isArray(kupon.nomor_kupon) 
-      ? kupon.nomor_kupon.join(' ') 
-      : kupon.nomor_kupon
-    
-    const matchSearch =
-      kupon.nama_keluarga.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      kupon.nama_remaja.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      kuponNumbers.includes(searchTerm)
-    const matchWijk = !filterWijk || kupon.wijk === filterWijk
-    const matchPenerimaan = !filterPenerimaan || kupon.status_penerimaan === filterPenerimaan
-    const matchStatus = !filterStatus || kupon.status_pembayaran === filterStatus
-    return matchSearch && matchWijk && matchStatus && matchPenerimaan
-  })
+  // Filter data - Optimized with useMemo
+  const filteredKupons = useMemo(() => {
+    return kupons.filter((kupon) => {
+      // Handle array atau string untuk nomor_kupon
+      const kuponNumbers = Array.isArray(kupon.nomor_kupon) 
+        ? kupon.nomor_kupon.join(' ') 
+        : kupon.nomor_kupon
+      
+      const matchSearch =
+        kupon.nama_keluarga.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        kupon.nama_remaja.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        kuponNumbers.includes(searchTerm)
+      const matchWijk = !filterWijk || kupon.wijk === filterWijk
+      const matchPenerimaan = !filterPenerimaan || kupon.status_penerimaan === filterPenerimaan
+      const matchStatus = !filterStatus || kupon.status_pembayaran === filterStatus
+      return matchSearch && matchWijk && matchStatus && matchPenerimaan
+    })
+  }, [kupons, searchTerm, filterWijk, filterPenerimaan, filterStatus])
 
-  // Generate expanded list untuk list view (kupon per nomor) dengan filter terintegrasi
-  const getExpandedKuponList = () => {
+  // Generate expanded list - Optimized with useMemo
+  const expandedKuponList = useMemo(() => {
     const expanded = []
     
-    // Semua kupon yang sudah terisi DARI FILTERED KUPONS (sudah ter-filter)
+    // Semua kupon yang sudah terisi DARI FILTERED KUPONS
     filteredKupons.forEach(kupon => {
       const numbers = Array.isArray(kupon.nomor_kupon) ? kupon.nomor_kupon : [kupon.nomor_kupon]
       numbers.forEach(num => {
@@ -374,7 +376,7 @@ const DataKupon = () => {
       }
     }
     
-    // Filter by kupon status (taken/available)
+    // Filter by kupon status
     let filtered = expanded
     if (filterKuponStatus === 'taken') {
       filtered = expanded.filter(k => k.isTaken)
@@ -384,7 +386,12 @@ const DataKupon = () => {
     
     // Sort by nomor
     return filtered.sort((a, b) => a.nomor.localeCompare(b.nomor))
-  }
+  }, [filteredKupons, usedCoupons, filterKuponStatus])
+
+  // Memoize getExpandedKuponList function
+  const getExpandedKuponList = useCallback(() => {
+    return expandedKuponList
+  }, [expandedKuponList])
 
   const columns = [
     { header: 'No', render: (_, index) => <span className="text-sm text-gray-900">{index + 1}</span> },
