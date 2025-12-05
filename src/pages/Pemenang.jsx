@@ -163,32 +163,6 @@ const Pemenang = () => {
             />
           )}
         </motion.div>
-
-        {/* Info */}
-        {winners.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="mt-6 bg-blue-50 border border-blue-200 rounded-xl p-6"
-          >
-            <h3 className="text-lg font-semibold text-blue-900 mb-3">Informasi</h3>
-            <ul className="space-y-2 text-sm text-blue-800">
-              <li className="flex items-start space-x-2">
-                <span className="text-blue-600 font-bold">•</span>
-                <span>Data pemenang tersimpan otomatis setelah menekan tombol "Simpan Pemenang"</span>
-              </li>
-              <li className="flex items-start space-x-2">
-                <span className="text-blue-600 font-bold">•</span>
-                <span>Klik tombol <strong>"Export ke CSV"</strong> untuk mengunduh data dalam format Excel</span>
-              </li>
-              <li className="flex items-start space-x-2">
-                <span className="text-blue-600 font-bold">•</span>
-                <span>Anda dapat menghapus data pemenang jika terjadi kesalahan</span>
-              </li>
-            </ul>
-          </motion.div>
-        )}
       </div>
     </div>
   )
